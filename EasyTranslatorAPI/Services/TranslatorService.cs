@@ -1,4 +1,5 @@
 ﻿using EasyTranslatorAPI.Clients;
+using EasyTranslatorAPI.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,16 @@ namespace EasyTranslatorAPI.Services
         public async Task<string> TranslateTestSentence()
         {
             return await _remoteTranslateClient.TranslateAsync("auto", "en", "buenos días");
+        }
+
+        public async Task<TranslationResponse> TranslateAsync(string sourceLanguage, string targetLanguage, string sourceText)
+        {
+            return new TranslationResponse()
+            {
+                SourceLanguage = sourceLanguage,
+                TargetLanguage = targetLanguage,
+                TargetText = await _remoteTranslateClient.TranslateAsync(sourceLanguage, targetLanguage, sourceText)
+            };
         }
     }
 }
