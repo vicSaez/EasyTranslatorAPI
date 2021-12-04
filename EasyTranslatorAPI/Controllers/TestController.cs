@@ -1,4 +1,5 @@
-﻿using EasyTranslatorAPI.Services;
+﻿using EasyTranslatorAPI.Dtos;
+using EasyTranslatorAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
