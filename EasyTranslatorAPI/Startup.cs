@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
 
 namespace EasyTranslatorAPI
 {
@@ -30,6 +31,7 @@ namespace EasyTranslatorAPI
             services.AddControllers();
             services.AddSingleton(typeof(ITranslateClient), typeof(GoogleTranslateClient));
             services.AddTransient(typeof(ITranslatorService), typeof(TranslatorService));
+            AddSwagger(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +44,12 @@ namespace EasyTranslatorAPI
 
             app.UseHttpsRedirection();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EasyTranslator API V1");
+            });
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -49,6 +57,27 @@ namespace EasyTranslatorAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+        }
+
+        private void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                var groupName = "v1";
+
+                options.SwaggerDoc(groupName, new OpenApiInfo
+                {
+                    Title = $"EasyTranslator {groupName}",
+                    Version = groupName,
+                    Description = "EasyTranslator API",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Vic Saez",
+                        Email = string.Empty,
+                        Url = new Uri("https://re-active.org"),
+                    }
+                });
             });
         }
     }
