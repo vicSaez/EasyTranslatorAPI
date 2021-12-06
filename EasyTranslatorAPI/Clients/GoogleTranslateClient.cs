@@ -6,6 +6,7 @@
     using System.Text.Json;
     using System.Threading.Tasks;
     using System.Web;
+    using EasyTranslatorAPI.Dtos;
     using Microsoft.Extensions.Options;
 
     internal sealed class GoogleTranslateClient : ITranslateClient
@@ -16,34 +17,34 @@
         public GoogleTranslateClient(IOptions<EasyTranslatorConfig> easyTranslatorConfig)
         {
             this.easyTranslatorConfig = easyTranslatorConfig;
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(easyTranslatorConfig.Value.GoogleTranslateBaseUrl);
+            httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(easyTranslatorConfig.Value.GoogleTranslateBaseUrl),
+            };
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<string> TranslateAsync(string sourceLanguage, string targetLanguage, string text)
+        public async Task<ClientResponse> TranslateAsync(string sourceLanguage, string targetLanguage, string text)
         {
-            var translation = string.Empty;
+            var clientResponse = new ClientResponse();
 
             var urlAction = $"t?client=dict-chrome-ex&sl={sourceLanguage}&tl={targetLanguage}&q={HttpUtility.UrlEncode(text)}";
             HttpResponseMessage response = await httpClient.GetAsync(urlAction);
+            clientResponse.StatusCode = response.StatusCode;
+            clientResponse.IsTranslationSuccess = response.IsSuccessStatusCode;
             if (response.IsSuccessStatusCode)
             {
                 var googleTranslateResponse =
                     await JsonSerializer.DeserializeAsync<GoogleTranslateResponse>(await response.Content.ReadAsStreamAsync());
-                translation = googleTranslateResponse.sentences[0].trans;
+                clientResponse.TranslatedText = googleTranslateResponse.sentences[0].trans;
             }
             else
             {
-                Console.WriteLine("Internal server Error");
+                clientResponse.ErrorText = "Google Translate Response was not 200 OK.";
             }
 
-
-            return translation;
+            return clientResponse;
         }
-
-
-
     }
 }
