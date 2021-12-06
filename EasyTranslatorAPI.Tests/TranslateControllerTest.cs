@@ -30,7 +30,7 @@ namespace EasyTranslatorAPI.Tests
             _mockTranslatorService.Setup(m => m.TranslateAsync("es", "en", "Funciona!")).ReturnsAsync(new TranslationResponse() { SourceLanguage = "es", TargetLanguage = "en", TargetText = "It Works!" });
 
             //act
-            var result = await _translateController.Get("es", "en", "Funciona!");
+            var result = await _translateController.GetAsync("es", "en", "Funciona!");
 
             //assert
 
@@ -47,7 +47,7 @@ namespace EasyTranslatorAPI.Tests
             _mockTranslatorService.Setup(m => m.TranslateAsync("es", "en", "Funciona!")).ReturnsAsync(new TranslationResponse(){ SourceLanguage ="es", TargetLanguage="en", TargetText= "It Works!" });
 
             //act
-            var okResult = await _translateController.Get("es","en","Funciona!") as OkObjectResult;
+            var okResult = await _translateController.GetAsync("es","en","Funciona!") as OkObjectResult;
 
             //assert
             var model = Assert.IsAssignableFrom<TranslationResponse>(okResult.Value);

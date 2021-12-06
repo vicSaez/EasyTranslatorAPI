@@ -1,33 +1,16 @@
-﻿using EasyTranslatorAPI.Clients;
-using EasyTranslatorAPI.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EasyTranslatorAPI.Services
+﻿namespace EasyTranslatorAPI.Services
 {
-    public class TranslatorService:ITranslatorService
+    using System.Threading.Tasks;
+    using EasyTranslatorAPI.Clients;
+    using EasyTranslatorAPI.Dtos;
+
+    internal sealed class TranslatorService : ITranslatorService
     {
-        private ITranslateClient _remoteTranslateClient;
+        private readonly ITranslateClient remoteTranslateClient;
 
         public TranslatorService(ITranslateClient remoteTranslateClient)
         {
-            _remoteTranslateClient = remoteTranslateClient;
-        }
-        public string CheckService()
-        { 
-            if (_remoteTranslateClient != null)
-            {
-                return "Service Ok";
-            }
-            return "Service KO";
-            
-        }
-
-        public async Task<string> TranslateTestSentence()
-        {
-            return await _remoteTranslateClient.TranslateAsync("auto", "en", "buenos días");
+            this.remoteTranslateClient = remoteTranslateClient;
         }
 
         public async Task<TranslationResponse> TranslateAsync(string sourceLanguage, string targetLanguage, string sourceText)
@@ -36,7 +19,7 @@ namespace EasyTranslatorAPI.Services
             {
                 SourceLanguage = sourceLanguage,
                 TargetLanguage = targetLanguage,
-                TargetText = await _remoteTranslateClient.TranslateAsync(sourceLanguage, targetLanguage, sourceText)
+                TargetText = await remoteTranslateClient.TranslateAsync(sourceLanguage, targetLanguage, sourceText),
             };
         }
     }

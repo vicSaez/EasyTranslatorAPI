@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EasyTranslatorAPI.Clients
+﻿namespace EasyTranslatorAPI.Clients
 {
+    using System.Threading.Tasks;
+
     public interface ITranslateClient
     {
         public Task<string> TranslateAsync(string sourceLanguage, string targetLanguage, string text);

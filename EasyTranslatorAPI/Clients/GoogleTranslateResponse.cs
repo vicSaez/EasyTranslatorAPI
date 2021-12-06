@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EasyTranslatorAPI.Clients
+﻿namespace EasyTranslatorAPI.Clients
 {
+    using System.Collections.Generic;
+
     public class Sentence
     {
         public string trans { get; set; }
