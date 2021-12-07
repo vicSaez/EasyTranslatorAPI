@@ -7,9 +7,9 @@ How to run:
 
 2)  docker build -f .\EasyTranslatorAPI\Dockerfile -t easytranslatorapi:1 .
 
-3)  docker run -it --rm -p 49155:80 easytranslatorapi:1
+3)  docker run -it --rm -p 49156:80 easytranslatorapi:1
 
-4)  You can access swagger at http://localhost:49155/swagger
+4)  You can access swagger at http://localhost:49156/swagger
 
 5)  Once working you can Launch FrontEnd EasyTranslatorFront
 
